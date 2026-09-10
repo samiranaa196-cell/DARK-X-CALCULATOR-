@@ -9,10 +9,6 @@ let operator = null;
 let resetDisplay = false;
 
 
-/* -----------------------------
-   DISPLAY
------------------------------ */
-
 function updateDisplay() {
 
     display.textContent = current;
@@ -25,10 +21,6 @@ function updateDisplay() {
     }
 }
 
-
-/* -----------------------------
-   NUMBER
------------------------------ */
 
 function inputNumber(number) {
 
@@ -58,16 +50,14 @@ function inputNumber(number) {
 }
 
 
-/* -----------------------------
-   DECIMAL
------------------------------ */
-
 function inputDecimal() {
 
     if (resetDisplay) {
         current = "0.";
         resetDisplay = false;
+
         updateDisplay();
+
         return;
     }
 
@@ -78,10 +68,6 @@ function inputDecimal() {
     updateDisplay();
 }
 
-
-/* -----------------------------
-   OPERATOR
------------------------------ */
 
 function chooseOperator(newOperator) {
 
@@ -94,16 +80,14 @@ function chooseOperator(newOperator) {
     }
 
     previous = current;
+
     operator = newOperator;
+
     resetDisplay = true;
 
     updateDisplay();
 }
 
-
-/* -----------------------------
-   CALCULATE
------------------------------ */
 
 function calculate() {
 
@@ -115,6 +99,7 @@ function calculate() {
     const second = parseFloat(current);
 
     let result;
+
 
     switch (operator) {
 
@@ -133,39 +118,42 @@ function calculate() {
         case "÷":
 
             if (second === 0) {
+
                 current = "Error";
+
                 previous = "";
                 operator = null;
+
                 resetDisplay = true;
 
                 updateDisplay();
+
                 return;
             }
 
             result = first / second;
-            break;
 
-        default:
-            return;
+            break;
     }
+
 
     if (!Number.isFinite(result)) {
         current = "Error";
-    } else {
+    }
+
+    else {
         current = formatNumber(result);
     }
 
+
     previous = "";
     operator = null;
+
     resetDisplay = true;
 
     updateDisplay();
 }
 
-
-/* -----------------------------
-   FORMAT NUMBER
------------------------------ */
 
 function formatNumber(number) {
 
@@ -173,51 +161,54 @@ function formatNumber(number) {
         return number.toString();
     }
 
-    return parseFloat(number.toFixed(10)).toString();
+    return parseFloat(
+        number.toFixed(10)
+    ).toString();
 }
 
-
-/* -----------------------------
-   CLEAR
------------------------------ */
 
 function clearCalculator() {
 
     current = "0";
+
     previous = "";
+
     operator = null;
+
     resetDisplay = false;
 
     updateDisplay();
 }
 
 
-/* -----------------------------
-   DELETE
------------------------------ */
-
 function deleteNumber() {
 
-    if (resetDisplay || current === "Error") {
+    if (
+        resetDisplay ||
+        current === "Error"
+    ) {
+
         current = "0";
+
         resetDisplay = false;
+
         updateDisplay();
+
         return;
     }
 
+
     if (current.length <= 1) {
         current = "0";
-    } else {
+    }
+
+    else {
         current = current.slice(0, -1);
     }
 
     updateDisplay();
 }
 
-
-/* -----------------------------
-   PERCENT
------------------------------ */
 
 function percentage() {
 
@@ -236,10 +227,6 @@ function percentage() {
     updateDisplay();
 }
 
-
-/* -----------------------------
-   BUTTONS
------------------------------ */
 
 buttons.forEach(button => {
 
@@ -260,11 +247,15 @@ buttons.forEach(button => {
 
                 chooseOperator(value);
 
-            } else if (value === ".") {
+            }
+
+            else if (value === ".") {
 
                 inputDecimal();
 
-            } else {
+            }
+
+            else {
 
                 inputNumber(value);
             }
@@ -294,13 +285,10 @@ buttons.forEach(button => {
 });
 
 
-/* -----------------------------
-   KEYBOARD SUPPORT
------------------------------ */
-
 document.addEventListener("keydown", event => {
 
     const key = event.key;
+
 
     if (key >= "0" && key <= "9") {
         inputNumber(key);
@@ -323,7 +311,9 @@ document.addEventListener("keydown", event => {
     }
 
     else if (key === "/") {
+
         event.preventDefault();
+
         chooseOperator("÷");
     }
 
@@ -331,7 +321,10 @@ document.addEventListener("keydown", event => {
         percentage();
     }
 
-    else if (key === "Enter" || key === "=") {
+    else if (
+        key === "Enter" ||
+        key === "="
+    ) {
         calculate();
     }
 
@@ -345,9 +338,5 @@ document.addEventListener("keydown", event => {
 
 });
 
-
-/* -----------------------------
-   START
------------------------------ */
 
 updateDisplay();
